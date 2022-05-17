@@ -3,13 +3,14 @@
     <v-list-subheader>FOLDERS</v-list-subheader>
 
     <v-list-item
-      v-for="(folder, index) in foldersView" :key="index"
-      :value="folder"
+      v-for="folder in folders" :key="folder.id"
+      :active="folder.id === activeFolderId"
+      @click="handleItemClick(folder.id)"
     >
       <v-list-item-avatar start>
-        <v-icon :icon="folder.icon"></v-icon>
+        <v-icon :icon="folder.icon"/>
       </v-list-item-avatar>
-      <v-list-item-title v-text="folder.name"></v-list-item-title>
+      <v-list-item-title>{{ folder.name }}</v-list-item-title>
     </v-list-item>
   </v-list>
 </template>
@@ -22,15 +23,15 @@ export default {
       type: Array,
       required: true,
     },
-    activeFolderName: {
-      type: String,
+    activeFolderId: {
+      type: Number,
       required: true,
     },
   },
-  computed: {
-    foldersView() {
-      return this.folders.map(({ name }) => ({ name, icon: 'mdi-folder', }))
+  methods: {
+    handleItemClick(folderId) {
+      this.$emit('setActiveFolderId', folderId);
     }
-  },
+  }
 }
 </script>

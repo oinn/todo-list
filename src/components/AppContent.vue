@@ -1,7 +1,7 @@
 <template>
   <v-main>
     <v-container>
-      <TaskList :tasks="activeFolderTasks"/>
+      <TaskList :tasks="tasks" @toggleCheckTackId="handleToggleCheckTackId"/>
     </v-container>
   </v-main>
 </template>
@@ -13,20 +13,15 @@ export default {
   name: 'AppContent',
   components: { TaskList },
   props: {
-    folders: {
+    tasks: {
       type: Array,
       required: true,
     },
-    activeFolderName: {
-      type: String,
-      required: true,
-    },
   },
-  computed: {
-    activeFolderTasks() {
-      const activeFolder = this.folders.find((folder) => folder.name === this.activeFolderName);
-      return activeFolder?.tasks || [];
-    },
+  methods: {
+    handleToggleCheckTackId(taskId) {
+      this.$emit('toggleCheckTackId', taskId)
+    }
   }
 };
 </script>

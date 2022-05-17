@@ -1,8 +1,14 @@
 <template>
   <v-app>
     <AppHeader/>
-    <AppSidebar :folders="folders" @change="changeActiveFolder"/>
-    <AppContent :folders="folders" :activeFolderName="activeFolderName"/>
+    <AppSidebar
+      :folders="folders"
+      :active-folder-id="activeFolderId"
+      @setActiveFolderId="setActiveFolderId"
+    />
+    <AppContent
+      :tasks="activeFolderTasks"
+      @toggleCheckTackId="toggleCheckTackId"/>
   </v-app>
 </template>
 
@@ -18,29 +24,47 @@ export default {
     return {
       folders: [
         {
+          id: 1,
           name: 'Personal',
+          icon: 'mdi-folder',
           tasks: [
-            { text: 'Task #1', isChecked: false },
-            { text: 'Task #2', isChecked: false },
-            { text: 'Task #3', isChecked: false }
+            { id: 1, text: 'Personal task #1', isChecked: false },
+            { id: 2, text: 'Personal task #3', isChecked: true },
+            { id: 3, text: 'Personal task #3', isChecked: false }
           ]
         },
         {
+          id: 2,
           name: 'Work',
+          icon: 'mdi-file',
           tasks: [
-            { text: 'Task #1', isChecked: false },
-            { text: 'Task #2', isChecked: false },
-            { text: 'Task #3', isChecked: false }
+            { id: 4, text: 'Work task #1', isChecked: false },
+            { id: 5, text: 'Work task #3', isChecked: false },
+            { id: 6, text: 'Work task #3', isChecked: false }
           ]
-        }
+        },
       ],
-      activeFolderName: 'Personal'
+      activeFolderId: 1,
     }
   },
+  computed: {
+    activeFolderTasks() {
+      return this.folders.find((folder) => folder.id === this.activeFolderId)?.tasks || [];
+    },
+  },
   methods: {
-    changeActiveFolder(folderName) {
-      this.activeFolderName = folderName;
+    setActiveFolderId(folderId) {
+      this.activeFolderId = folderId;
+    },
+    toggleCheckTackId(taskId) {
+      this.folders = this.folders.map((folder) => ({
+        ...folder,
+        tasks: folder.tasks.map((task) => ({
+          ...task,
+          isChecked: task.id === taskId ? !task.isChecked: task.isChecked,
+        })),
+      }));
     }
-  }
+  },
 }
 </script>

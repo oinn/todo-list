@@ -1,6 +1,10 @@
 <template>
   <v-navigation-drawer absolute>
-    <FoldersList :folders="folders" :activeFolderName="activeFolderName"/>
+    <FoldersList
+      :folders="folders"
+      :active-folder-id="activeFolderId"
+      @setActiveFolderId="handleSetActiveFolderId"
+    />
   </v-navigation-drawer>
 </template>
 
@@ -15,10 +19,15 @@ export default {
       type: Array,
       required: true,
     },
-    activeFolderName: {
-      type: String,
+    activeFolderId: {
+      type: Number,
       required: true,
     },
   },
+  methods: {
+    handleSetActiveFolderId(folderId) {
+      this.$emit('setActiveFolderId', folderId);
+    }
+  }
 };
 </script>
